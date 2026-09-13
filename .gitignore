@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# 数据文件（保留目录结构，忽略实际数据）
+data/raw/*.csv
+data/intermediate/*.csv
+data/processed/*.parquet
+!data/**/.gitkeep
+
+# 环境变量
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 测试/覆盖率
+.coverage
+htmlcov/
+.pytest_cache/
