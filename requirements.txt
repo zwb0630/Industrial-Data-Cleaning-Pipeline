@@ -1,0 +1,27 @@
+# ===== 2026.09 数据模拟基础 =====
+numpy
+pyyaml
+
+# ===== 2026.10 Pandas / 可视化 / 插补 =====
+pandas
+matplotlib
+seaborn
+scipy
+
+# ===== 2026.11 环境变量读取 =====
+python-dotenv
+
+# ===== 2026.12 Parquet / MySQL / CLI =====
+pyarrow
+SQLAlchemy
+PyMySQL
+click
+
+# ===== 2027.02 异常检测 / 单元测试 =====
+pyod
+pytest
+
+# ===== 2027.04+ 类型检查 / 覆盖率 / DuckDB =====
+mypy
+pytest-cov
+duckdb

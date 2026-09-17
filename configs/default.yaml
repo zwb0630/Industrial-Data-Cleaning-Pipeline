@@ -1,0 +1,119 @@
+project:
+  name: Industrial-Data-Cleaning-Pipeline
+  version: 0.1.0
+  random_seed: 42
+
+paths:
+  raw_dir: data/raw
+  intermediate_dir: data/intermediate
+  processed_dir: data/processed
+  log_dir: logs
+
+simulation:
+  start_date: "2026-09-01"
+  days: 7
+  sample_freq: "1s"          # 1Hz
+  hours_per_day: 8
+  day_start_time: "08:00:00"
+
+  devices:
+    - id: "device_001"
+      name: "设备1"
+      sensors:
+        vibration:
+          base_value: 0.5
+          noise_std: 0.05
+          unit: "mm/s"
+        temperature:
+          base_value: 65.0
+          noise_std: 1.5
+          unit: "°C"
+        current:
+          base_value: 12.0
+          noise_std: 0.8
+          unit: "A"
+
+    - id: "device_002"
+      name: "设备2"
+      sensors:
+        vibration:
+          base_value: 0.7
+          noise_std: 0.06
+          unit: "mm/s"
+        temperature:
+          base_value: 70.0
+          noise_std: 1.8
+          unit: "°C"
+        current:
+          base_value: 13.5
+          noise_std: 0.9
+          unit: "A"
+
+    - id: "device_003"
+      name: "设备3"
+      sensors:
+        vibration:
+          base_value: 0.4
+          noise_std: 0.04
+          unit: "mm/s"
+        temperature:
+          base_value: 60.0
+          noise_std: 1.2
+          unit: "°C"
+        current:
+          base_value: 10.5
+          noise_std: 0.7
+          unit: "A"
+
+  injection:
+    missing_rate: 0.05
+    duplicate_rate: 0.01
+    linear_drift:
+      enabled: true
+      per_day: 0.02
+
+  output:
+    format: "csv"
+    filename: "raw_sensor_data.csv"
+    timestamp_column: "timestamp"
+
+cleaning:
+  time_alignment:
+    freq: "1s"
+    method: "asfreq"
+
+  interpolation:
+    method: "linear"         # linear / spline
+    spline_order: 3
+    limit: null
+
+  outlier:
+    method: "3sigma"
+    window: "5min"
+    sigma: 3
+
+  output:
+    parquet_path: "data/processed/clean_sensor_data.parquet"
+    intermediate_csv: "data/intermediate/cleaned_preview.csv"
+
+anomaly:
+  enabled: false
+  method: "isolation_forest"
+  contamination: 0.01
+  random_state: 42
+
+database:
+  enabled: false
+  dialect: "mysql+pymysql"
+  host_env: "MYSQL_HOST"
+  port_env: "MYSQL_PORT"
+  user_env: "MYSQL_USER"
+  password_env: "MYSQL_PASSWORD"
+  database_env: "MYSQL_DATABASE"
+  table: "clean_sensor_data"
+  device_table: "device_ledger"
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/pipeline.log"
